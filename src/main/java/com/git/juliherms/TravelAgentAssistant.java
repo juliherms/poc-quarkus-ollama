@@ -10,8 +10,11 @@ import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
  * O retriever conecta ao PgVectorEmbeddingStore para RAG:
  * antes de responder, o assistente busca no pgvector os trechos
  * de documentos mais relevantes e os injeta no contexto da pergunta.
+ * 
+ * Esta anotação instrui o Quarkus a gerar uma implementação desta interface
+ * que se conecta ao open-ai
  */
-@RegisterAiService(retriever = PgVectorEmbeddingStore.class)
+@RegisterAiService //(retriever = PgVectorEmbeddingStore.class)
 public interface TravelAgentAssistant {
 
     @SystemMessage("""
