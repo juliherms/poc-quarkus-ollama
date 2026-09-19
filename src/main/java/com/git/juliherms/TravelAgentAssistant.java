@@ -11,14 +11,14 @@ import io.quarkiverse.langchain4j.pgvector.PgVectorEmbeddingStore;
  * antes de responder, o assistente busca no pgvector os trechos
  * de documentos mais relevantes e os injeta no contexto da pergunta.
  */
-@RegisterAiService(retriever = PgVectorEmbeddingStore.class)
+// Esta anotação instrui o Quarkus a gerar uma implementação desta interface que se conecta ao LLM configurado.
+@RegisterAiService
 public interface TravelAgentAssistant {
 
-    @SystemMessage("""
-            Você é um agente de viagens especializado.
-            Responda sempre em português do Brasil, de forma clara e objetiva.
-            Use o contexto recuperado para enriquecer suas respostas quando disponível.
-            """)
-    @UserMessage("{{userMessage}}")
+    /**
+     * O método 'chat' recebe a mensagem do usuário e retorna a resposta do LLM.
+     * @param userMessage A mensagem do usuário.
+     * @return A resposta gerada pelo modelo de linguagem.
+     */
     String chat(String userMessage);
 }
