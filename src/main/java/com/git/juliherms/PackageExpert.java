@@ -1,11 +1,17 @@
 package com.git.juliherms;
 
+import com.git.juliherms.tools.BookingTools;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import io.quarkiverse.langchain4j.RegisterAiService;
 
-@RegisterAiService
+/**
+ * Interface que define o comportamento do assistente virtual especializado em pacotes de viagem e reservas.
+ * Ele utiliza as ferramentas disponíveis para interagir com o sistema de reservas e responde às perguntas dos clientes
+ * com base nas informações fornecidas nos documentos (RAG).
+ */
+@RegisterAiService(tools = BookingTools.class) //essa propriedade é um array, então você pode adicionar mais ferramentas se necessário
 public interface PackageExpert {
 
     @SystemMessage("""
