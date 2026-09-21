@@ -2,6 +2,7 @@ package com.git.juliherms.service;
 
 import com.git.juliherms.model.Booking;
 import com.git.juliherms.model.enums.BookingStatusEnum;
+import com.git.juliherms.model.enums.CategoryEnum;
 import com.git.juliherms.security.SecurityContext;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.time.LocalDate;
@@ -20,9 +21,23 @@ public class BookingService {
      */
     public BookingService() {
         bookings.put(12345L, new Booking(12345L, "John Doe", "Tesouros do Egito",
-                LocalDate.now().plusMonths(2), LocalDate.now().plusMonths(2).plusDays(10), BookingStatusEnum.CONFIRMED));
+                LocalDate.now().plusMonths(2), LocalDate.now().plusMonths(2).plusDays(10), BookingStatusEnum.CONFIRMED, CategoryEnum.TREASURES));
         bookings.put(67890L, new Booking(67890L, "Jane Smith", "Aventura Amazônia",
-                LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(3).plusDays(7), BookingStatusEnum.CONFIRMED));
+                LocalDate.now().plusMonths(3), LocalDate.now().plusMonths(3).plusDays(7), BookingStatusEnum.CONFIRMED, CategoryEnum.ADVENTURE));
+        bookings.put(98765L, new Booking(98765L, "Peter Jones", "Trilha Inca",
+                LocalDate.now().plusMonths(4), LocalDate.now().plusMonths(4).plusDays(8), BookingStatusEnum.CONFIRMED, CategoryEnum.ADVENTURE));
+
+    }
+
+    /**
+     * Recupera uma lista de reservas com base na categoria fornecida.
+     * @param category A categoria das reservas a serem recuperadas.
+     * @return Uma lista de reservas correspondentes à categoria especificada.
+     */
+    public List<Booking> findPackagesByCategory(CategoryEnum category) {
+        return bookings.values().stream()
+                .filter(booking -> category.equals(booking.category()))
+                .toList();
     }
 
     /**
@@ -50,8 +65,14 @@ public class BookingService {
             Booking booking = bookings.get(bookingId);
             // Validando o usuário "logado", e não apenas o informado
             if (booking.customerName().equals(currentUser)) {
-                Booking cancelledBooking = new Booking(booking.id(), booking.customerName(), booking.destination(),
-                        booking.startDate(), booking.endDate(), BookingStatusEnum.CANCELLED);
+                Booking cancelledBooking = new Booking(
+                        booking.id(),
+                        booking.customerName(),
+                        booking.destination(),
+                        booking.startDate(),
+                        booking.endDate(),
+                        BookingStatusEnum.CANCELLED,
+                        booking.category());
                 bookings.put(bookingId, cancelledBooking);
                 return Optional.of(cancelledBooking);
             }

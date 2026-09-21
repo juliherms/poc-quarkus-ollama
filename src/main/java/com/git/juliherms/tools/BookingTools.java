@@ -1,10 +1,13 @@
 package com.git.juliherms.tools;
 
 import com.git.juliherms.model.Booking;
+import com.git.juliherms.model.enums.CategoryEnum;
 import com.git.juliherms.service.BookingService;
 import dev.langchain4j.agent.tool.Tool;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+
+import java.util.List;
 
 /**
  * Classe de ferramentas para interagir com o serviço de reservas.
@@ -41,5 +44,21 @@ public class BookingTools{
         return bookingService.cancelBooking(bookingId)
                 .map(b -> "Reserva " + b.id() + " cancelada com sucesso.")
                 .orElse("Não foi possível cancelar a reserva. Verifique se o ID está correto e se você tem permissão.");
+    }
+
+    /**
+     * Lista os pacotes de viagem disponíveis para uma determinada categoria (ex: ADVENTURE, TREASURES).
+     * @param category A categoria dos pacotes de viagem a serem listados.
+     * @return Uma string contendo os destinos dos pacotes encontrados ou uma mensagem indicando que nenhum pacote foi encontrado.
+     */
+    @Tool("Lista os pacotes de viagem disponíveis para uma determinada categoria (ex: ADVENTURE, TREASURES).")
+    public String listPackagesByCategory(CategoryEnum category) {
+        List<Booking> packages = bookingService.findPackagesByCategory(category);
+        if (packages.isEmpty()) {
+            return "Nenhum pacote encontrado para a categoria: " + category;
+        }
+        return "Pacotes encontrados para a categoria '" + category + "': " + packages.stream()
+                .map(Booking::destination)
+                .toList().toString();
     }
 }

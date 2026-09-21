@@ -1,6 +1,7 @@
 package com.git.juliherms.model;
 
 import com.git.juliherms.model.enums.BookingStatusEnum;
+import com.git.juliherms.model.enums.CategoryEnum;
 
 import java.time.LocalDate;
 
@@ -10,5 +11,6 @@ public record Booking(
         String destination,
         LocalDate startDate,
         LocalDate endDate,
-        BookingStatusEnum status
+        BookingStatusEnum status,
+        CategoryEnum category
 ) {}
